@@ -28,7 +28,7 @@ public class Board extends JLayeredPane {
 			if (i == 0) {
 				board[0][0] = new Rook(this, 0, 0);
 			}else if (i == 2) {
-				board[0][2] = new Bishop(this, 0, 2);
+				board[2][4] = new Bishop(this, 2, 4);
 			}
 		}
 		
@@ -113,9 +113,20 @@ public class Board extends JLayeredPane {
 	}
 	
 	public void showDiagonalMoves(int x, int y, Piece piece) {
-		for (int i = 0; i < SIZE; i++) {
-			if (board[x + i][y + i] == null) {
-				moves.add(new Move(this, piece, x + i, y + i));
+		int diff = Math.abs(x - y);
+		for (int i = 0; i < SIZE - diff; i++) {
+			int newX, newY;
+			if (x < y) {
+				newX = i;
+				newY = i + diff;
+			}else if (y < x) {
+				newX = i + diff;
+				newY = i;
+			}else {
+				newX = newY = 0;
+			}
+			if (board[newX][newY] == null) {
+				moves.add(new Move(this, piece, newX, newY));
 			}
 		}
 	}
