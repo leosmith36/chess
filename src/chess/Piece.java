@@ -1,5 +1,8 @@
 package chess;
 
+import java.awt.Color;
+import java.awt.Font;
+
 public abstract class Piece extends BoardObject{
 
 	private static final long serialVersionUID = 3578791061852413527L;
@@ -11,7 +14,8 @@ public abstract class Piece extends BoardObject{
 	public Piece(Board board, Pieces type, int xTile, int yTile) {
 		super(board, xTile, yTile);
 		pieceType = type;
-		
+		this.setFont(new Font("arial", Font.PLAIN, 20));
+		this.setForeground(Color.RED);
 	}
 	
 	@Override
