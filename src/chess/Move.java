@@ -17,8 +17,8 @@ public class Move extends BoardObject{
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setColor(Color.GREEN);
-		g.fillOval(0, 0, Board.TILE, Board.TILE);
+		g.setColor(Color.GRAY);
+		g.fillOval(Board.TILE / 4, Board.TILE / 4, Board.TILE / 2, Board.TILE / 2);
 		
 	}
 
