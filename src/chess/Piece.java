@@ -3,8 +3,11 @@ package chess;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLayeredPane;
+import javax.swing.border.Border;
 
 public abstract class Piece extends BoardObject{
 
@@ -17,6 +20,7 @@ public abstract class Piece extends BoardObject{
 		pieceType = type;
 		this.setFont(new Font("arial", Font.PLAIN, 20));
 		this.setForeground(Color.RED);
+		this.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
 	}
 	
 	@Override
