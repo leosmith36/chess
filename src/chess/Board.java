@@ -29,11 +29,11 @@ public class Board extends JLayeredPane {
 
 		for (int i = 0; i < SIZE; i++) {
 			if (i == 0) {
-				board[0][0] = new Rook(this, 0, 0);
+				board[0][0] = new Rook(this, 0, 0, Player.BLACK);
 			}else if (i == 2) {
-				board[0][2] = new Bishop(this, 2, 0);
+				board[0][2] = new Bishop(this, 2, 0, Player.BLACK);
 			}else if (i == 3) {
-				board[0][3] = new Queen(this, 3, 0);
+				board[0][3] = new Queen(this, 3, 0, Player.BLACK);
 			}
 		}
 		

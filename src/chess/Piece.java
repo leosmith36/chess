@@ -15,12 +15,24 @@ public abstract class Piece extends BoardObject{
 
 	protected Pieces pieceType;
 
-	public Piece(Board board, Pieces type, int xTile, int yTile) {
+	protected Player player;
+	
+	public Piece(Board board, Pieces type, int xTile, int yTile, Player player) {
 		super(board, xTile, yTile, JLayeredPane.DRAG_LAYER);
 		pieceType = type;
+		this.player = player;
 		this.setFont(new Font("arial", Font.PLAIN, 20));
-		this.setForeground(Color.RED);
-		this.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+		switch (player) {
+		case BLACK:
+			this.setForeground(Color.WHITE);
+			break;
+		case WHITE:
+			this.setForeground(Color.BLACK);
+			break;
+		default:
+			break;
+		
+		}
 	}
 	
 	@Override
@@ -53,5 +65,8 @@ public abstract class Piece extends BoardObject{
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, Board.TILE, Board.TILE);
 		}
+		g.setColor(Color.GRAY);
+		g.fillRect(10, 10, Board.TILE - 20, Board.TILE - 20);
+		
 	}
 }

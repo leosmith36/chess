@@ -23,6 +23,7 @@ public abstract class BoardObject extends JButton{
 		super();
 		this.setOpaque(false);
 		this.setContentAreaFilled(false);
+		this.setBorderPainted(false);
 		setTiles(xTile, yTile);
 		setSize(new Dimension(Board.TILE, Board.TILE));
 		board.add(this, layer);
