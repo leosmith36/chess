@@ -216,11 +216,29 @@ public class Board extends JLayeredPane {
 		}
 	}
 	
+	public void movePawn(Piece piece) {
+		int x = piece.getXTile(), y = piece.getYTile();
+	}
+	
+	public void moveKnight(Piece piece) {
+		int x = piece.getXTile(), y = piece.getYTile();
+	}
+	
+	public void moveKing(Piece piece) {
+		int x = piece.getXTile(), y = piece.getYTile();
+	}
+	
 	public void movePiece(Piece piece, int newXTile, int newYTile) {
 		int xTile = piece.getXTile(), yTile = piece.getYTile();
 		board[yTile][xTile] = null;
 		board[newYTile][newXTile] = piece;
 		piece.setTiles(newXTile, newYTile);
+	}
+	
+	public void removePiece(Piece piece) {
+		int x = piece.getXTile(), y = piece.getYTile();
+		this.remove(board[y][x]);
+		board[y][x] = null;
 	}
 	
 	public void addMoveMarker(Piece piece, int xTile, int yTile) {

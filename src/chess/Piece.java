@@ -24,8 +24,14 @@ public abstract class Piece extends BoardObject{
 		if (board.getCurrentPiece() == this) {
 			board.hideMoves();
 		}else if (board.getCurrentPiece() != null){
-			board.hideMoves();
-			board.showMoves(this);
+			if (board.getMarks().contains(this)) {
+				board.removePiece(this);
+				board.movePiece(board.getCurrentPiece(), getXTile(), getYTile());
+				board.hideMoves();
+			}else {
+				board.hideMoves();
+				board.showMoves(this);
+			}
 		}else {
 			board.showMoves(this);
 		}
@@ -39,7 +45,7 @@ public abstract class Piece extends BoardObject{
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		if (board.getMarks().contains(this)){
+		if (board != null && board.getMarks().contains(this)){
 			g.setColor(Color.BLUE);
 			g.fillRect(0, 0, Board.TILE, Board.TILE);
 		}
