@@ -58,6 +58,10 @@ public abstract class Piece extends BoardObject{
 		return pieceType;
 	}
 	
+	public Player getPlayer() {
+		return player;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);

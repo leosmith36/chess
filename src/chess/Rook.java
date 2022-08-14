@@ -1,5 +1,8 @@
 package chess;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 public class Rook extends Piece {
 
 	private static final long serialVersionUID = 1355241352435787703L;
@@ -8,5 +11,17 @@ public class Rook extends Piece {
 		super(board, Pieces.ROOK, xTile, yTile, player);
 		this.setText("R");
 	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (player == Player.WHITE) {
+			g.setColor(Color.WHITE);
+		}else {
+			g.setColor(Color.BLACK);
+		}
+		g.drawString("R", Board.TILE / 2, Board.TILE / 2);
+	}
+
 
 }

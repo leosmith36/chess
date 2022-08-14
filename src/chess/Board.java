@@ -36,6 +36,7 @@ public class Board extends JLayeredPane {
 				board[0][3] = new Queen(this, 3, 0, Player.BLACK);
 			}
 		}
+		board[1][1] = new Pawn(this, 1, 1, Player.WHITE);
 		
 		this.repaint();
 	}
@@ -54,6 +55,7 @@ public class Board extends JLayeredPane {
 		case KNIGHT:
 			break;
 		case PAWN:
+			showPawnMoves(piece);
 			break;
 		case QUEEN:
 			showDiagonalMoves(piece);
@@ -201,7 +203,7 @@ public class Board extends JLayeredPane {
 			newX++;
 			newY++;
 		}
-		
+	
 		newX = x + 1;
 		newY = y - 1;
 		while (newX < SIZE && newY >= 0) {
@@ -216,8 +218,29 @@ public class Board extends JLayeredPane {
 		}
 	}
 	
-	public void movePawn(Piece piece) {
+	public void showPawnMoves(Piece piece) {
 		int x = piece.getXTile(), y = piece.getYTile();
+		
+		int dir = switch(piece.getPlayer()) {
+		case WHITE -> -1;
+		case BLACK -> 1;
+		default -> 1;
+		};
+		
+		int newY = y + dir;
+		if (newY < SIZE && newY >= 0 && board[newY][x] == null) {
+			addMoveMarker(piece, x, newY);
+		}
+		
+		int newXLeft = x - 1;
+		if (newXLeft >= 0 && newY < SIZE && newY >= 0 && board[newY][newXLeft] != null) {
+			addMark(board[newY][newXLeft]);
+		}
+		
+		int newXRight = x + 1;
+		if (newXRight >= 0 && newY < SIZE && newY >= 0 && board[newY][newXRight] != null) {
+			addMark(board[newY][newXRight]);
+		}
 	}
 	
 	public void moveKnight(Piece piece) {
