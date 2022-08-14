@@ -2,6 +2,7 @@ package chess;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 
 import javax.swing.JLayeredPane;
 
@@ -35,5 +36,12 @@ public abstract class Piece extends BoardObject{
 		return pieceType;
 	}
 	
-	
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (board.getMarks().contains(this)){
+			g.setColor(Color.BLUE);
+			g.fillRect(0, 0, Board.TILE, Board.TILE);
+		}
+	}
 }

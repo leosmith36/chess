@@ -17,7 +17,8 @@ public class Board extends JLayeredPane {
 	
 	private Piece[][] board = new Piece[8][8];
 	
-	private LinkedList<BoardObject> moves = new LinkedList<BoardObject>();
+	private LinkedList<Move> moves = new LinkedList<Move>();
+	private LinkedList<Piece> marks = new LinkedList<Piece>(); 
 	
 	private Piece currentPiece = null;
 
@@ -73,6 +74,7 @@ public class Board extends JLayeredPane {
 		currentPiece = null;
 		moves.forEach(item -> this.remove(item));
 		moves.clear();
+		marks.clear();
 	}
 	
 	@Override
@@ -112,6 +114,7 @@ public class Board extends JLayeredPane {
 			if (board[y][i] == null) {
 				addMoveMarker(piece, i, y);
 			}else {
+				addMark(board[y][i]);
 				break;
 			}
 			i--;
@@ -122,7 +125,7 @@ public class Board extends JLayeredPane {
 			if (board[y][i] == null) {
 				addMoveMarker(piece, i, y);
 			}else {
-				moves.add(new Attack(this, i, y));
+				addMark(board[y][i]);
 				break;
 			}
 			i++;
@@ -137,6 +140,7 @@ public class Board extends JLayeredPane {
 			if (board[i][x] == null) {
 				addMoveMarker(piece, x, i);
 			}else {
+				addMark(board[i][x]);
 				break;
 			}
 			i--;
@@ -147,6 +151,7 @@ public class Board extends JLayeredPane {
 			if (board[i][x] == null) {
 				addMoveMarker(piece, x, i);
 			}else {
+				addMark(board[i][x]);
 				break;
 			}
 			i++;
@@ -164,6 +169,7 @@ public class Board extends JLayeredPane {
 			if (board[newY][newX] == null) {
 				addMoveMarker(piece, newX, newY);
 			}else {
+				addMark(board[newY][newX]);
 				break;
 			}
 			newX--;
@@ -176,6 +182,7 @@ public class Board extends JLayeredPane {
 			if (board[newY][newX] == null) {
 				addMoveMarker(piece, newX, newY);
 			}else {
+				addMark(board[newY][newX]);
 				break;
 			}
 			newX--;
@@ -188,6 +195,7 @@ public class Board extends JLayeredPane {
 			if (board[newY][newX] == null) {
 				addMoveMarker(piece, newX, newY);
 			}else {
+				addMark(board[newY][newX]);
 				break;
 			}
 			newX++;
@@ -200,6 +208,7 @@ public class Board extends JLayeredPane {
 			if (board[newY][newX] == null) {
 				addMoveMarker(piece, newX, newY);
 			}else {
+				addMark(board[newY][newX]);
 				break;
 			}
 			newX++;
@@ -220,6 +229,14 @@ public class Board extends JLayeredPane {
 	
 	public Piece getCurrentPiece() {
 		return currentPiece;
+	}
+	
+	public void addMark(Piece piece) {
+		marks.add(piece);
+	}
+	
+	public LinkedList<Piece> getMarks(){
+		return marks;
 	}
 	
 	public static int getPositionFromTile(int n) {
