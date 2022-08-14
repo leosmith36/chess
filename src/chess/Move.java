@@ -3,6 +3,8 @@ package chess;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.swing.JLayeredPane;
+
 public class Move extends BoardObject{
 
 	private static final long serialVersionUID = 2940948011444781220L;
@@ -10,7 +12,7 @@ public class Move extends BoardObject{
 	private Piece piece;
 
 	public Move(Board board, Piece piece, int xTile, int yTile) {
-		super(board, xTile, yTile);
+		super(board, xTile, yTile, JLayeredPane.DEFAULT_LAYER);
 		this.piece = piece;
 	}
 	

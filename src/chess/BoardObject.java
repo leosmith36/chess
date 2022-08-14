@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLayeredPane;
 import javax.swing.border.EmptyBorder;
 
 public abstract class BoardObject extends JButton{
@@ -18,14 +19,14 @@ public abstract class BoardObject extends JButton{
 	
 	protected Board board;
 
-	public BoardObject(Board board, int xTile, int yTile) {
+	public BoardObject(Board board, int xTile, int yTile, int layer) {
 		super();
 		this.setOpaque(false);
 		this.setContentAreaFilled(false);
 		this.setBorderPainted(false);
 		setTiles(xTile, yTile);
 		setSize(new Dimension(Board.TILE, Board.TILE));
-		board.add(this);
+		board.add(this, layer);
 		this.board = board;
 		addActionListener(new ActionListener() {
 

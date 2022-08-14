@@ -17,7 +17,9 @@ public class Board extends JLayeredPane {
 	
 	private Piece[][] board = new Piece[8][8];
 	
-	private LinkedList<Move> moves = new LinkedList<Move>();
+	private LinkedList<BoardObject> moves = new LinkedList<BoardObject>();
+	
+	private Piece currentPiece = null;
 
 	public Board() {
 		this.setPreferredSize(new Dimension(Window.WIDTH, Window.HEIGHT));
@@ -38,11 +40,11 @@ public class Board extends JLayeredPane {
 	}
 	
 	public void showMoves(Piece piece) {
-		int x = piece.getXTile(), y = piece.getYTile();
+		currentPiece = piece;
 		Pieces type = piece.getType();
 		switch (type) {
 		case BISHOP:
-			showDiagonalMoves(x, y, piece);
+			showDiagonalMoves(piece);
 			break;
 		case EMPTY:
 			break;
@@ -53,13 +55,13 @@ public class Board extends JLayeredPane {
 		case PAWN:
 			break;
 		case QUEEN:
-			showDiagonalMoves(x, y, piece);
-			showHorizontalMoves(y, piece);
-			showVerticalMoves(x, piece);
+			showDiagonalMoves(piece);
+			showHorizontalMoves(piece);
+			showVerticalMoves(piece);
 			break;
 		case ROOK:
-			showVerticalMoves(x, piece);
-			showHorizontalMoves(y, piece);
+			showVerticalMoves(piece);
+			showHorizontalMoves(piece);
 			break;
 		default:
 			break;
@@ -68,6 +70,7 @@ public class Board extends JLayeredPane {
 	}
 	
 	public void hideMoves() {
+		currentPiece = null;
 		moves.forEach(item -> this.remove(item));
 		moves.clear();
 	}
@@ -101,60 +104,103 @@ public class Board extends JLayeredPane {
 		}
 	}
 	
-	public void showHorizontalMoves(int y, Piece piece) {
-		for (int i = 0; i < SIZE; i++) {
+	public void showHorizontalMoves(Piece piece) {
+		int x = piece.getXTile(), y = piece.getYTile();
+		int i;
+		i = x - 1;
+		while (i >= 0) {
 			if (board[y][i] == null) {
-				moves.add(new Move(this, piece, i, y));
+				addMoveMarker(piece, i, y);
+			}else {
+				break;
 			}
+			i--;
+		}
+		
+		i = x + 1;
+		while (i < SIZE) {
+			if (board[y][i] == null) {
+				addMoveMarker(piece, i, y);
+			}else {
+				moves.add(new Attack(this, i, y));
+				break;
+			}
+			i++;
 		}
 	}
 	
-	public void showVerticalMoves(int x, Piece piece) {
-		for (int i = 0; i < SIZE; i++) {
+	public void showVerticalMoves(Piece piece) {
+		int x = piece.getXTile(), y = piece.getYTile();
+		int i;
+		i = y - 1;
+		while (i >= 0) {
 			if (board[i][x] == null) {
-				moves.add(new Move(this, piece, x, i));
+				addMoveMarker(piece, x, i);
+			}else {
+				break;
 			}
+			i--;
+		}
+		
+		i = y + 1;
+		while (i < SIZE) {
+			if (board[i][x] == null) {
+				addMoveMarker(piece, x, i);
+			}else {
+				break;
+			}
+			i++;
 		}
 	}
 	
-	public void showDiagonalMoves(int x, int y, Piece piece) {
+	public void showDiagonalMoves(Piece piece) {
+		int x = piece.getXTile(), y = piece.getYTile();
+		
 		int newX, newY;
 		
-		newX = x;
-		newY = y;
+		newX = x - 1;
+		newY = y - 1;
 		while (newX >= 0 && newY >= 0) {
 			if (board[newY][newX] == null) {
-				moves.add(new Move(this, piece, newX, newY));
+				addMoveMarker(piece, newX, newY);
+			}else {
+				break;
 			}
 			newX--;
 			newY--;
 		}
 		
-		newX = x;
-		newY = y;
+		newX = x - 1;
+		newY = y + 1;
 		while (newX >= 0 && newY < SIZE) {
 			if (board[newY][newX] == null) {
-				moves.add(new Move(this, piece, newX, newY));
+				addMoveMarker(piece, newX, newY);
+			}else {
+				break;
 			}
 			newX--;
 			newY++;
 		}
 		
-		newX = x;
-		newY = y;
+		newX = x + 1;
+		newY = y + 1;
 		while (newX < SIZE && newY < SIZE) {
 			if (board[newY][newX] == null) {
-				moves.add(new Move(this, piece, newX, newY));
+				addMoveMarker(piece, newX, newY);
+			}else {
+				break;
 			}
 			newX++;
 			newY++;
 		}
 		
-		newX = x;
-		newY = y;
+		newX = x + 1;
+		newY = y - 1;
 		while (newX < SIZE && newY >= 0) {
 			if (board[newY][newX] == null) {
-				moves.add(new Move(this, piece, newX, newY));
+				addMoveMarker(piece, newX, newY);
+			}else {
+				break;
 			}
 			newX++;
 			newY--;
@@ -164,8 +210,16 @@ public class Board extends JLayeredPane {
 	public void movePiece(Piece piece, int newXTile, int newYTile) {
 		int xTile = piece.getXTile(), yTile = piece.getYTile();
 		board[yTile][xTile] = null;
-		board[newXTile][newYTile] = piece;
+		board[newYTile][newXTile] = piece;
 		piece.setTiles(newXTile, newYTile);
+	}
+	
+	public void addMoveMarker(Piece piece, int xTile, int yTile) {
+		moves.add(new Move(this, piece, xTile, yTile));
+	}
+	
+	public Piece getCurrentPiece() {
+		return currentPiece;
 	}
 	
 	public static int getPositionFromTile(int n) {
