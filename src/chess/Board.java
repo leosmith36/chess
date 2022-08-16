@@ -2,6 +2,7 @@ package chess;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
@@ -23,6 +24,9 @@ public class Board extends JLayeredPane {
 	private Piece currentPiece = null;
 	
 	private Player turn = Player.WHITE;
+	private Player winner = null;
+	
+	private boolean whiteCheck = false, blackCheck = false;
 
 	public Board() {
 		this.setPreferredSize(new Dimension(Window.WIDTH, Window.HEIGHT));
@@ -85,7 +89,6 @@ public class Board extends JLayeredPane {
 	}
 	
 	public void hideMoves() {
-		currentPiece = null;
 		moves.forEach(item -> this.remove(item));
 		moves.clear();
 		marks.clear();
@@ -97,6 +100,31 @@ public class Board extends JLayeredPane {
 		
 		g.setColor(Color.RED);
 		g.fillRect(0, 0, Window.WIDTH, Window.HEIGHT);
+		
+		g.setFont(new Font("arial", Font.PLAIN, 24));
+		if (winner == Player.WHITE) {
+			g.setColor(Color.WHITE);
+			g.drawString("White wins!", 50, 50);
+		}else if (winner == Player.BLACK) {
+			g.setColor(Color.BLACK);
+			g.drawString("Black wins!", 50, 50);
+		}else if (turn == Player.WHITE) {
+			g.setColor(Color.WHITE);
+			g.drawString("White's turn", 50, 50);
+		}else if (turn == Player.BLACK) {
+			g.setColor(Color.BLACK);
+			g.drawString("Black's turn", 50, 50);
+		}
+		
+		if (whiteCheck) {
+			g.setColor(Color.WHITE);
+			g.drawString("White's king is under check!", 50, 575);
+		}
+		
+		if (blackCheck) {
+			g.setColor(Color.BLACK);
+			g.drawString("Black's king is under check!", 50, 25);
+		}
 		
 		for (int i = 0; i < SIZE; i++) {
 			int y = i * TILE + MARGIN;
@@ -343,15 +371,44 @@ public class Board extends JLayeredPane {
 		}
 	}
 	
-	public void movePiece(Piece piece, int newXTile, int newYTile) {
+	public void movePiece(Piece piece, int newXTile, int newYTile, boolean committed) {
 		int xTile = piece.getXTile(), yTile = piece.getYTile();
 		board[yTile][xTile] = null;
 		board[newYTile][newXTile] = piece;
 		piece.setTiles(newXTile, newYTile);
-		if (!piece.getHasMoved()) {
+		if (!piece.getHasMoved() && committed) {
 			piece.setHasMoved(true);
 		}
+
+		hideMoves();
+		clearCurrentPiece();
+		if (committed) {
+			whiteCheck = checkForCheck(Player.WHITE);
+			blackCheck = checkForCheck(Player.BLACK);
+		}
+		
+
 		nextTurn();
+	}
+	
+	public boolean checkForCheck(Player player) {
+		boolean kingMarked = false;
+		for (Piece[] row : board) {
+			for (Piece item : row) {
+				if (item != null && item.getPlayer() != player) {
+					showMoves(item);
+					for (Piece mark: marks) {
+						if (mark.getType() == Pieces.KING) {
+							if (mark.getPlayer() == player) {
+								kingMarked = true;
+							}
+						}
+					}
+					hideMoves();
+				}
+			}
+		}
+		return kingMarked;
 	}
 	
 	public void removePiece(Piece piece) {
@@ -368,8 +425,21 @@ public class Board extends JLayeredPane {
 		return board[yTile][xTile];
 	}
 	
-	public void addMoveMarker(Piece piece, int xTile, int yTile) {
-		moves.add(new Move(this, piece, xTile, yTile));
+	public void addMoveMarker(Piece piece, int newX, int newY) {
+//		int x = piece.getXTile(), y = piece.getYTile();
+//		movePiece(piece, newX, newY, false);
+//		if (!checkForCheck(turn)) {
+//			movePiece(piece, x, y, false);
+//			moves.add(new Move(this, piece, newX, newY));
+//		}else {
+//			movePiece(piece, x, y, false);
+//		}
+		moves.add(new Move(this, piece, newX, newY));
+		
+	}
+	
+	public void clearCurrentPiece() {
+		currentPiece = null;
 	}
 	
 	public Piece getCurrentPiece() {

@@ -38,19 +38,22 @@ public abstract class Piece extends BoardObject{
 	@Override
 	public void boardAction() {
 		if (board.getTurn() != player) {
+			if (board.getMarks().contains(this) && board.getCurrentPiece() != null) {
+				board.removePiece(this);
+				board.movePiece(board.getCurrentPiece(), getXTile(), getYTile(), true);
+				board.hideMoves();
+				board.clearCurrentPiece();
+			}
 			return;
 		}
+		
 		if (board.getCurrentPiece() == this) {
 			board.hideMoves();
+			board.clearCurrentPiece();
 		}else if (board.getCurrentPiece() != null){
-			if (board.getMarks().contains(this)) {
-				board.removePiece(this);
-				board.movePiece(board.getCurrentPiece(), getXTile(), getYTile());
 				board.hideMoves();
-			}else {
-				board.hideMoves();
+				board.clearCurrentPiece();
 				board.showMoves(this);
-			}
 		}else {
 			board.showMoves(this);
 		}

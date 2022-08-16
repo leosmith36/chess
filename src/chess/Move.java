@@ -26,8 +26,9 @@ public class Move extends BoardObject{
 
 	@Override
 	public void boardAction() {
-		board.movePiece(piece, tileLocation.x, tileLocation.y);
+		board.movePiece(piece, tileLocation.x, tileLocation.y, true);
 		board.hideMoves();
+		board.clearCurrentPiece();
 		
 	}
 
