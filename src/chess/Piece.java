@@ -53,9 +53,9 @@ public abstract class Piece extends BoardObject{
 		}else if (board.getCurrentPiece() != null){
 				board.hideMoves();
 				board.clearCurrentPiece();
-				board.showMoves(this);
+				board.showMoves(this, true);
 		}else {
-			board.showMoves(this);
+			board.showMoves(this, true);
 		}
 		board.repaint();
 	}
