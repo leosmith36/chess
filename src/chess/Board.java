@@ -28,16 +28,25 @@ public class Board extends JLayeredPane {
 		this.setLayout(null);
 
 		for (int i = 0; i < SIZE; i++) {
-			if (i == 0) {
-				addPiece(new Rook(this, 0, 0, Player.BLACK));
-			}else if (i == 2) {
-				addPiece(new Bishop(this, 2, 0, Player.BLACK));
+			if (i == 0 || i == 7) {
+				addPiece(new Rook(this, i, 0, Player.BLACK));
+				addPiece(new Rook(this, i, 7, Player.WHITE));
+			}else if (i == 1 || i == 6) {
+				addPiece(new Knight(this, i, 0, Player.BLACK));
+				addPiece(new Knight(this, i, 7, Player.WHITE));
+			}else if (i == 2 || i == 5) {
+				addPiece(new Bishop(this, i, 0, Player.BLACK));
+				addPiece(new Bishop(this, i, 7, Player.WHITE));
 			}else if (i == 3) {
-				addPiece(new Queen(this, 3, 0, Player.BLACK));
+				addPiece(new Queen(this, i, 0, Player.BLACK));
+				addPiece(new Queen(this, i, 7, Player.WHITE));
+			}else if (i == 4) {
+				addPiece(new King(this, i, 0, Player.BLACK));
+				addPiece(new King(this, i, 7, Player.WHITE));
 			}
+			addPiece(new Pawn(this, i, 1, Player.BLACK));
+			addPiece(new Pawn(this, i, 6, Player.WHITE));
 		}
-		addPiece(new Pawn(this, 1, 1, Player.BLACK));
-		addPiece(new Knight(this, 4, 4, Player.WHITE));
 		
 		this.repaint();
 	}
@@ -230,6 +239,7 @@ public class Board extends JLayeredPane {
 	public void showPawnMoves(Piece piece) {
 		int x = piece.getXTile(), y = piece.getYTile();
 		Piece spotPiece;
+		int newY, newX;
 		
 		int dir = switch(piece.getPlayer()) {
 		case WHITE -> -1;
@@ -237,22 +247,36 @@ public class Board extends JLayeredPane {
 		default -> 1;
 		};
 		
-		int newY = y + dir;
-		spotPiece = getPiece(x, newY);
-		if (newY < SIZE && newY >= 0 && spotPiece == null) {
-			addMoveMarker(piece, x, newY);
+		newY = y + dir;
+		if (newY < SIZE && newY >= 0) {
+			spotPiece = getPiece(x, newY);
+			if (spotPiece == null) {
+				addMoveMarker(piece, x, newY);
+			}
 		}
 		
-		int newXLeft = x - 1;
-		spotPiece = getPiece(newXLeft ,newY);
-		if (newXLeft >= 0 && newY < SIZE && newY >= 0 && spotPiece != null) {
-			addMark(board[newY][newXLeft]);
+		int newYStart = y + 2 * dir;
+		if (newYStart < SIZE && newYStart >= 0 && !piece.getHasMoved()) {
+			spotPiece = getPiece(x, newYStart);
+			if (spotPiece == null) {
+				addMoveMarker(piece, x, newYStart);
+			}
 		}
 		
-		int newXRight = x + 1;
-		spotPiece = getPiece(newXRight, newY);
-		if (newXRight >= 0 && newY < SIZE && newY >= 0 && spotPiece != null) {
-			addMark(board[newY][newXRight]);
+		newX = x - 1;
+		if (newX >= 0 && newX < SIZE && newY >= 0 && newY < SIZE) {
+			spotPiece = getPiece(newX,newY);
+			if (spotPiece != null) {
+				addMark(spotPiece);
+			}
+		}
+		
+		newX = x + 1;
+		if (newX >= 0 && newX < SIZE && newY >= 0 && newY < SIZE) {
+			spotPiece = getPiece(newX, newY);
+			if (spotPiece != null) {
+				addMark(spotPiece);
+			}
 		}
 	}
 	
@@ -299,6 +323,22 @@ public class Board extends JLayeredPane {
 	
 	public void showKingMoves(Piece piece) {
 		int x = piece.getXTile(), y = piece.getYTile();
+		
+		for (int i = -1; i <= 1; i++) {
+			for (int j = -1; j <= 1; j++) {
+				if (i != 0 || j != 0) {
+					int newX = x + i, newY = y + j;
+					if (newX >= 0 && newX < SIZE && newY >= 0 && newY < SIZE) {
+						Piece spotPiece = getPiece(newX, newY);
+						if (spotPiece == null) {
+							addMoveMarker(piece, newX, newY);
+						}else {
+							addMark(spotPiece);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public void movePiece(Piece piece, int newXTile, int newYTile) {
@@ -306,6 +346,9 @@ public class Board extends JLayeredPane {
 		board[yTile][xTile] = null;
 		board[newYTile][newXTile] = piece;
 		piece.setTiles(newXTile, newYTile);
+		if (!piece.getHasMoved()) {
+			piece.setHasMoved(true);
+		}
 	}
 	
 	public void removePiece(Piece piece) {
@@ -331,7 +374,9 @@ public class Board extends JLayeredPane {
 	}
 	
 	public void addMark(Piece piece) {
-		marks.add(piece);
+		if (currentPiece.getPlayer() != piece.getPlayer()) {
+			marks.add(piece);
+		}
 	}
 	
 	public LinkedList<Piece> getMarks(){

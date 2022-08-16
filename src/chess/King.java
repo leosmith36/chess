@@ -20,7 +20,7 @@ public class King extends Piece{
 		}else {
 			g.setColor(Color.BLACK);
 		}
-		g.drawString("Ki", Board.TILE / 2, Board.TILE / 2);
+		g.drawString("K", Board.TILE / 2, Board.TILE / 2);
 	}
 
 }

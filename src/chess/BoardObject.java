@@ -18,6 +18,8 @@ public abstract class BoardObject extends JButton{
 	protected Point tileLocation;
 	
 	protected Board board;
+	
+	protected boolean hasMoved = false;
 
 	public BoardObject(Board board, int xTile, int yTile, int layer) {
 		super();
@@ -60,5 +62,13 @@ public abstract class BoardObject extends JButton{
 	
 	public void setTiles(int xTile, int yTile) {
 		setTiles(new Point (xTile, yTile));
+	}
+	
+	public void setHasMoved(boolean hasMoved) {
+		this.hasMoved = hasMoved;
+	}
+	
+	public boolean getHasMoved() {
+		return hasMoved;
 	}
 }
