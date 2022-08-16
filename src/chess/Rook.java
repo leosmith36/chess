@@ -9,7 +9,6 @@ public class Rook extends Piece {
 
 	public Rook(Board board, int xTile, int yTile, Player player) {
 		super(board, Pieces.ROOK, xTile, yTile, player);
-		this.setText("R");
 	}
 	
 	@Override

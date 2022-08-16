@@ -29,14 +29,15 @@ public class Board extends JLayeredPane {
 
 		for (int i = 0; i < SIZE; i++) {
 			if (i == 0) {
-				board[0][0] = new Rook(this, 0, 0, Player.BLACK);
+				addPiece(new Rook(this, 0, 0, Player.BLACK));
 			}else if (i == 2) {
-				board[0][2] = new Bishop(this, 2, 0, Player.BLACK);
+				addPiece(new Bishop(this, 2, 0, Player.BLACK));
 			}else if (i == 3) {
-				board[0][3] = new Queen(this, 3, 0, Player.BLACK);
+				addPiece(new Queen(this, 3, 0, Player.BLACK));
 			}
 		}
-		board[1][1] = new Pawn(this, 1, 1, Player.WHITE);
+		addPiece(new Pawn(this, 1, 1, Player.BLACK));
+		addPiece(new Knight(this, 4, 4, Player.WHITE));
 		
 		this.repaint();
 	}
@@ -48,11 +49,11 @@ public class Board extends JLayeredPane {
 		case BISHOP:
 			showDiagonalMoves(piece);
 			break;
-		case EMPTY:
-			break;
 		case KING:
+			showKingMoves(piece);
 			break;
 		case KNIGHT:
+			showKnightMoves(piece);
 			break;
 		case PAWN:
 			showPawnMoves(piece);
@@ -113,10 +114,11 @@ public class Board extends JLayeredPane {
 		int i;
 		i = x - 1;
 		while (i >= 0) {
-			if (board[y][i] == null) {
+			Piece spotPiece = getPiece(i, y);
+			if (spotPiece == null) {
 				addMoveMarker(piece, i, y);
 			}else {
-				addMark(board[y][i]);
+				addMark(spotPiece);
 				break;
 			}
 			i--;
@@ -124,10 +126,11 @@ public class Board extends JLayeredPane {
 		
 		i = x + 1;
 		while (i < SIZE) {
-			if (board[y][i] == null) {
+			Piece spotPiece = getPiece(i, y);
+			if (spotPiece == null) {
 				addMoveMarker(piece, i, y);
 			}else {
-				addMark(board[y][i]);
+				addMark(spotPiece);
 				break;
 			}
 			i++;
@@ -139,10 +142,11 @@ public class Board extends JLayeredPane {
 		int i;
 		i = y - 1;
 		while (i >= 0) {
-			if (board[i][x] == null) {
+			Piece spotPiece = getPiece(x, i);
+			if (spotPiece == null) {
 				addMoveMarker(piece, x, i);
 			}else {
-				addMark(board[i][x]);
+				addMark(spotPiece);
 				break;
 			}
 			i--;
@@ -150,10 +154,11 @@ public class Board extends JLayeredPane {
 		
 		i = y + 1;
 		while (i < SIZE) {
-			if (board[i][x] == null) {
+			Piece spotPiece = getPiece(x, i);
+			if (spotPiece == null) {
 				addMoveMarker(piece, x, i);
 			}else {
-				addMark(board[i][x]);
+				addMark(spotPiece);
 				break;
 			}
 			i++;
@@ -168,10 +173,11 @@ public class Board extends JLayeredPane {
 		newX = x - 1;
 		newY = y - 1;
 		while (newX >= 0 && newY >= 0) {
-			if (board[newY][newX] == null) {
+			Piece spotPiece = getPiece(newX,newY);
+			if (spotPiece == null) {
 				addMoveMarker(piece, newX, newY);
 			}else {
-				addMark(board[newY][newX]);
+				addMark(spotPiece);
 				break;
 			}
 			newX--;
@@ -181,10 +187,11 @@ public class Board extends JLayeredPane {
 		newX = x - 1;
 		newY = y + 1;
 		while (newX >= 0 && newY < SIZE) {
-			if (board[newY][newX] == null) {
+			Piece spotPiece = getPiece(newX,newY);
+			if (spotPiece == null) {
 				addMoveMarker(piece, newX, newY);
 			}else {
-				addMark(board[newY][newX]);
+				addMark(spotPiece);
 				break;
 			}
 			newX--;
@@ -194,10 +201,11 @@ public class Board extends JLayeredPane {
 		newX = x + 1;
 		newY = y + 1;
 		while (newX < SIZE && newY < SIZE) {
-			if (board[newY][newX] == null) {
+			Piece spotPiece = getPiece(newX,newY);
+			if (spotPiece == null) {
 				addMoveMarker(piece, newX, newY);
 			}else {
-				addMark(board[newY][newX]);
+				addMark(spotPiece);
 				break;
 			}
 			newX++;
@@ -207,10 +215,11 @@ public class Board extends JLayeredPane {
 		newX = x + 1;
 		newY = y - 1;
 		while (newX < SIZE && newY >= 0) {
-			if (board[newY][newX] == null) {
+			Piece spotPiece = getPiece(newX,newY);
+			if (spotPiece == null) {
 				addMoveMarker(piece, newX, newY);
 			}else {
-				addMark(board[newY][newX]);
+				addMark(spotPiece);
 				break;
 			}
 			newX++;
@@ -220,6 +229,7 @@ public class Board extends JLayeredPane {
 	
 	public void showPawnMoves(Piece piece) {
 		int x = piece.getXTile(), y = piece.getYTile();
+		Piece spotPiece;
 		
 		int dir = switch(piece.getPlayer()) {
 		case WHITE -> -1;
@@ -228,26 +238,66 @@ public class Board extends JLayeredPane {
 		};
 		
 		int newY = y + dir;
-		if (newY < SIZE && newY >= 0 && board[newY][x] == null) {
+		spotPiece = getPiece(x, newY);
+		if (newY < SIZE && newY >= 0 && spotPiece == null) {
 			addMoveMarker(piece, x, newY);
 		}
 		
 		int newXLeft = x - 1;
-		if (newXLeft >= 0 && newY < SIZE && newY >= 0 && board[newY][newXLeft] != null) {
+		spotPiece = getPiece(newXLeft ,newY);
+		if (newXLeft >= 0 && newY < SIZE && newY >= 0 && spotPiece != null) {
 			addMark(board[newY][newXLeft]);
 		}
 		
 		int newXRight = x + 1;
-		if (newXRight >= 0 && newY < SIZE && newY >= 0 && board[newY][newXRight] != null) {
+		spotPiece = getPiece(newXRight, newY);
+		if (newXRight >= 0 && newY < SIZE && newY >= 0 && spotPiece != null) {
 			addMark(board[newY][newXRight]);
 		}
 	}
 	
-	public void moveKnight(Piece piece) {
+	public void showKnightMoves(Piece piece) {
 		int x = piece.getXTile(), y = piece.getYTile();
+		
+		int newXFirst, newYFirst, newXSecond, newYSecond;
+		Piece spotPiece;
+		
+		for (int i = -2; i <= 2; i += 4) {
+			newXFirst = x + i;
+			newYFirst = y + i;
+			
+			if (newXFirst >= 0 && newXFirst < SIZE) {
+				for (int j = -1; j <= 1; j += 2) {
+					newYSecond = y + j;
+					if (newYSecond >= 0 && newYSecond < SIZE) {
+						spotPiece = getPiece(newXFirst, newYSecond);
+						if (spotPiece == null) {
+							addMoveMarker(piece, newXFirst, newYSecond);
+						}else {
+							addMark(spotPiece);
+						}
+					}
+				}
+			}
+			
+			if (newYFirst >= 0 && newYFirst < SIZE) {
+				for (int j = -1; j <= 1; j += 2) {
+					newXSecond = x + j;
+					if (newXSecond >= 0 && newXSecond < SIZE) {
+						spotPiece = getPiece(newXSecond, newYFirst);
+						if (spotPiece == null) {
+							addMoveMarker(piece, newXSecond, newYFirst);
+						}else {
+							addMark(spotPiece);
+						}
+					}
+				}
+			}
+
+		}
 	}
 	
-	public void moveKing(Piece piece) {
+	public void showKingMoves(Piece piece) {
 		int x = piece.getXTile(), y = piece.getYTile();
 	}
 	
@@ -262,6 +312,14 @@ public class Board extends JLayeredPane {
 		int x = piece.getXTile(), y = piece.getYTile();
 		this.remove(board[y][x]);
 		board[y][x] = null;
+	}
+	
+	public void addPiece(Piece piece) {
+		board[piece.getYTile()][piece.getXTile()] = piece;
+	}
+	
+	public Piece getPiece(int xTile, int yTile) {
+		return board[yTile][xTile];
 	}
 	
 	public void addMoveMarker(Piece piece, int xTile, int yTile) {

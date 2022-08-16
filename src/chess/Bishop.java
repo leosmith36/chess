@@ -9,7 +9,6 @@ public class Bishop extends Piece{
 	
 	public Bishop(Board board, int xTile, int yTile, Player player) {
 		super(board, Pieces.BISHOP, xTile, yTile, player);
-		this.setText("B");
 	}
 	
 	@Override

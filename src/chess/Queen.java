@@ -9,7 +9,6 @@ public class Queen extends Piece {
 
 	public Queen(Board board, int xTile, int yTile, Player player) {
 		super(board, Pieces.QUEEN, xTile, yTile, player);
-		setText("Q");
 	}
 
 	@Override
