@@ -37,6 +37,9 @@ public abstract class Piece extends BoardObject{
 	
 	@Override
 	public void boardAction() {
+		if (board.getTurn() != player) {
+			return;
+		}
 		if (board.getCurrentPiece() == this) {
 			board.hideMoves();
 		}else if (board.getCurrentPiece() != null){

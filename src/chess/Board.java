@@ -21,6 +21,8 @@ public class Board extends JLayeredPane {
 	private LinkedList<Piece> marks = new LinkedList<Piece>(); 
 	
 	private Piece currentPiece = null;
+	
+	private Player turn = Player.WHITE;
 
 	public Board() {
 		this.setPreferredSize(new Dimension(Window.WIDTH, Window.HEIGHT));
@@ -349,6 +351,7 @@ public class Board extends JLayeredPane {
 		if (!piece.getHasMoved()) {
 			piece.setHasMoved(true);
 		}
+		nextTurn();
 	}
 	
 	public void removePiece(Piece piece) {
@@ -377,6 +380,18 @@ public class Board extends JLayeredPane {
 		if (currentPiece.getPlayer() != piece.getPlayer()) {
 			marks.add(piece);
 		}
+	}
+	
+	public void nextTurn() {
+		if (turn == Player.WHITE) {
+			turn = Player.BLACK;
+		}else {
+			turn = Player.WHITE;
+		}
+	}
+	
+	public Player getTurn() {
+		return turn;
 	}
 	
 	public LinkedList<Piece> getMarks(){
