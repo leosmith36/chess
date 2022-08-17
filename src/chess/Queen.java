@@ -11,16 +11,5 @@ public class Queen extends Piece {
 		super(board, Pieces.QUEEN, xTile, yTile, player, "Q");
 	}
 
-//	@Override
-//	public void paintComponent(Graphics g) {
-//		super.paintComponent(g);
-//		if (player == Player.WHITE) {
-//			g.setColor(Color.WHITE);
-//		}else {
-//			g.setColor(Color.BLACK);
-//		}
-//		g.drawString("Q", Board.TILE / 2, Board.TILE / 2);
-//	}
-
 
 }

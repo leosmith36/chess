@@ -11,16 +11,5 @@ public class King extends Piece{
 		super(board, Pieces.KING, xTile, yTile, player, "K");
 		// TODO Auto-generated constructor stub
 	}
-	
-//	@Override
-//	public void paintComponent(Graphics g) {
-//		super.paintComponent(g);
-//		if (player == Player.WHITE) {
-//			g.setColor(Color.WHITE);
-//		}else {
-//			g.setColor(Color.BLACK);
-//		}
-//		g.drawString("K", Board.TILE / 2, Board.TILE / 2);
-//	}
 
 }

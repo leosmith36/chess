@@ -11,16 +11,6 @@ public class Knight extends Piece {
 		super(board, Pieces.KNIGHT, xTile, yTile, player, "N");
 		// TODO Auto-generated constructor stub
 	}
-//
-//	@Override
-//	public void paintComponent(Graphics g) {
-//		super.paintComponent(g);
-//		if (player == Player.WHITE) {
-//			g.setColor(Color.WHITE);
-//		}else {
-//			g.setColor(Color.BLACK);
-//		}
-//		g.drawString("N", Board.TILE / 2, Board.TILE / 2);
-//	}
+
 
 }

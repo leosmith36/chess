@@ -397,15 +397,6 @@ public class Board extends JLayeredPane {
 		}
 	}
 	
-//	public boolean checkForCheckMate(Player player) {
-//		boolean checkMate = false;
-//		for (Piece[] row : board) {
-//			for (Piece item : row) {
-//				if (item != null && )
-//			}
-//		}
-//	}
-	
 	public boolean checkForCheck(Player player, boolean checkMate) {
 		boolean kingMarked = false;
 		for (Piece[] row : board) {

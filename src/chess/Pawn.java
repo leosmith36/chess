@@ -13,16 +13,5 @@ public class Pawn extends Piece {
 	}
 
 
-//	@Override
-//	public void paintComponent(Graphics g) {
-//		super.paintComponent(g);
-//		if (player == Player.WHITE) {
-//			g.setColor(Color.WHITE);
-//		}else {
-//			g.setColor(Color.BLACK);
-//		}
-//		g.drawString("P", Board.TILE / 2, Board.TILE / 2);
-//	}
-
 
 }
