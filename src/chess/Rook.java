@@ -8,19 +8,19 @@ public class Rook extends Piece {
 	private static final long serialVersionUID = 1355241352435787703L;
 
 	public Rook(Board board, int xTile, int yTile, Player player) {
-		super(board, Pieces.ROOK, xTile, yTile, player);
+		super(board, Pieces.ROOK, xTile, yTile, player, "B");
 	}
 	
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		if (player == Player.WHITE) {
-			g.setColor(Color.WHITE);
-		}else {
-			g.setColor(Color.BLACK);
-		}
-		g.drawString("R", Board.TILE / 2, Board.TILE / 2);
-	}
+//	@Override
+//	public void paintComponent(Graphics g) {
+//		super.paintComponent(g);
+//		if (player == Player.WHITE) {
+//			g.setColor(Color.WHITE);
+//		}else {
+//			g.setColor(Color.BLACK);
+//		}
+//		g.drawString("R", Board.TILE / 2, Board.TILE / 2);
+//	}
 
 
 }

@@ -385,31 +385,52 @@ public class Board extends JLayeredPane {
 		hideMoves();
 		if (committed) {
 			clearCurrentPiece();
-			whiteCheck = checkForCheck(Player.WHITE);
-			blackCheck = checkForCheck(Player.BLACK);
+			whiteCheck = checkForCheck(Player.WHITE, false);
+			blackCheck = checkForCheck(Player.BLACK, false);
+			
+			if (whiteCheck && checkForCheck(Player.WHITE, true)) {
+				winner = Player.BLACK;
+			}else if (blackCheck && checkForCheck(Player.BLACK, true)) {
+				winner = Player.WHITE;
+			}
 			nextTurn();
 		}
 	}
 	
-	public boolean checkForCheckMate(Player player) {
-		return true;
-	}
+//	public boolean checkForCheckMate(Player player) {
+//		boolean checkMate = false;
+//		for (Piece[] row : board) {
+//			for (Piece item : row) {
+//				if (item != null && )
+//			}
+//		}
+//	}
 	
-	public boolean checkForCheck(Player player) {
+	public boolean checkForCheck(Player player, boolean checkMate) {
 		boolean kingMarked = false;
 		for (Piece[] row : board) {
 			for (Piece item : row) {
 				if (item != null && item.getPlayer() != player) {
-					showMoves(item, false);
-					for (Piece mark: marks) {
-						if (mark.getType() == Pieces.KING && mark.getPlayer() == player) {
+					if (!checkMate) {
+						showMoves(item, false);
+						for (Piece mark: marks) {
+							if (mark.getType() == Pieces.KING && mark.getPlayer() == player) {
+								kingMarked = true;
+							}
+						}
+						hideMoves();
+					}else {
+						showMoves(item, true);
+						if (marks.size() > 0 || moves.size() > 0) {
 							kingMarked = true;
 						}
+						hideMoves();
 					}
-					hideMoves();
+
 				}
 			}
 		}
+		hideMoves();
 		return kingMarked;
 	}
 	
@@ -438,7 +459,7 @@ public class Board extends JLayeredPane {
 			hideMoves();
 			movePiece(piece, newX, newY, false);
 			
-			if (!checkForCheck(turn)) {
+			if (!checkForCheck(turn, false)) {
 				newMove = new Move(this, piece, newX, newY);
 			}
 			

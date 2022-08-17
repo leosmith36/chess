@@ -17,11 +17,18 @@ public abstract class Piece extends BoardObject{
 
 	protected Player player;
 	
-	public Piece(Board board, Pieces type, int xTile, int yTile, Player player) {
+	protected String letter;
+	
+	protected int w, h;
+	
+	public Piece(Board board, Pieces type, int xTile, int yTile, Player player, String letter) {
 		super(board, xTile, yTile, JLayeredPane.DRAG_LAYER);
 		pieceType = type;
+		this.letter = letter;
 		this.player = player;
-		this.setFont(new Font("arial", Font.PLAIN, 20));
+		this.setFont(new Font("arial", Font.PLAIN, Board.TILE / 2));
+		w = this.getFontMetrics(this.getFont()).stringWidth(letter);
+		h = this.getFont().getSize();
 		switch (player) {
 		case BLACK:
 			this.setForeground(Color.WHITE);
@@ -78,5 +85,13 @@ public abstract class Piece extends BoardObject{
 		g.setColor(Color.GRAY);
 		g.fillRect(10, 10, Board.TILE - 20, Board.TILE - 20);
 		
+		
+		if (player == Player.WHITE) {
+			g.setColor(Color.WHITE);
+		}else {
+			g.setColor(Color.BLACK);
+		}
+
+		g.drawString(letter, Board.TILE / 2 - w / 2, Board.TILE / 2 + h / 3);
 	}
 }
